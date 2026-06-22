@@ -36,3 +36,5 @@ Task 7: complete (commits 11de651..86d71d7, review clean — 2 Minor cosmetic)
 
 Task 8: complete (commits 1606d63..328089e, review clean — 1 Minor)
 - Minor: empty rename leaves input field visually blank (no reset to original) — UX polish, triage at final review
+
+Task 9: complete (commits 127dc38..b474891, review clean — 1 Minor dead code)
