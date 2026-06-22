@@ -49,47 +49,50 @@ export function playHit() {
 function playHitImpl(ac) {
   const now = ac.currentTime;
 
-  // Noise transient (the "crack").
-  const dur = 0.12;
-  const buffer = ac.createBuffer(1, Math.floor(ac.sampleRate * dur), ac.sampleRate);
+  // 1) Sharp contact transient — a very short bright noise burst (the "tink").
+  const nDur = 0.05;
+  const buffer = ac.createBuffer(1, Math.floor(ac.sampleRate * nDur), ac.sampleRate);
   const data = buffer.getChannelData(0);
   for (let i = 0; i < data.length; i++) {
-    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 2);
+    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / data.length, 3);
   }
   const noise = ac.createBufferSource();
   noise.buffer = buffer;
-
   const hp = ac.createBiquadFilter();
   hp.type = 'highpass';
-  hp.frequency.value = 1100;
-
-  const bp = ac.createBiquadFilter();
-  bp.type = 'bandpass';
-  bp.frequency.value = 2600;
-  bp.Q.value = 0.8;
-
+  hp.frequency.value = 3000;
   const noiseGain = ac.createGain();
   noiseGain.gain.setValueAtTime(0.0001, now);
-  noiseGain.gain.exponentialRampToValueAtTime(0.9, now + 0.003);
-  noiseGain.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+  noiseGain.gain.exponentialRampToValueAtTime(0.4, now + 0.002);
+  noiseGain.gain.exponentialRampToValueAtTime(0.0006, now + nDur);
+  noise.connect(hp).connect(noiseGain).connect(ac.destination);
 
-  noise.connect(hp).connect(bp).connect(noiseGain).connect(ac.destination);
-
-  // Woody body thump.
-  const osc = ac.createOscillator();
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(220, now);
-  osc.frequency.exponentialRampToValueAtTime(90, now + 0.1);
-  const oscGain = ac.createGain();
-  oscGain.gain.setValueAtTime(0.0001, now);
-  oscGain.gain.exponentialRampToValueAtTime(0.5, now + 0.004);
-  oscGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.12);
-  osc.connect(oscGain).connect(ac.destination);
+  // 2) Bright metallic ring — a few inharmonic high partials that ring out,
+  //    giving the characteristic aluminium-bat "PING".
+  const ring = 0.26;
+  const partials = [
+    { f: 2700, g: 0.38 },
+    { f: 4300, g: 0.24 },
+    { f: 5900, g: 0.15 },
+    { f: 8200, g: 0.08 },
+  ];
+  for (const { f, g } of partials) {
+    const osc = ac.createOscillator();
+    osc.type = 'sine';
+    // tiny downward pitch glide sharpens the metallic attack
+    osc.frequency.setValueAtTime(f * 1.04, now);
+    osc.frequency.exponentialRampToValueAtTime(f, now + 0.05);
+    const og = ac.createGain();
+    og.gain.setValueAtTime(0.0001, now);
+    og.gain.exponentialRampToValueAtTime(g, now + 0.004);
+    og.gain.exponentialRampToValueAtTime(0.0004, now + ring);
+    osc.connect(og).connect(ac.destination);
+    osc.start(now);
+    osc.stop(now + ring + 0.02);
+  }
 
   noise.start(now);
-  noise.stop(now + dur);
-  osc.start(now);
-  osc.stop(now + 0.13);
+  noise.stop(now + nDur);
 }
 
 // A celebratory ascending fanfare for finishing every task ("home run").
