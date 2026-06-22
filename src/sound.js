@@ -41,6 +41,12 @@ export function playHit() {
   if (isMuted()) return;
   const ac = getCtx();
   if (!ac) return;
+  try {
+    playHitImpl(ac);
+  } catch (_e) { /* never let a sound glitch disrupt the tap handler */ }
+}
+
+function playHitImpl(ac) {
   const now = ac.currentTime;
 
   // Noise transient (the "crack").
@@ -91,6 +97,12 @@ export function playHomeRun() {
   if (isMuted()) return;
   const ac = getCtx();
   if (!ac) return;
+  try {
+    playHomeRunImpl(ac);
+  } catch (_e) { /* never let a sound glitch disrupt the tap handler */ }
+}
+
+function playHomeRunImpl(ac) {
   const now = ac.currentTime;
   const notes = [523.25, 659.25, 783.99, 1046.5]; // C5 E5 G5 C6
   notes.forEach((freq, i) => {
