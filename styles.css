@@ -93,22 +93,24 @@ html, body {
 .ball.done {
   background: var(--white); border-color: var(--red);
 }
-/* Two symmetric curved dashed seams, like a real baseball. */
+/* Two symmetric curved dashed seams hugging the left/right edges. */
 .ball.done::before, .ball.done::after {
   content: ''; position: absolute; top: -8%;
-  width: 66px; height: 62px; border-radius: 50%;
+  width: 70px; height: 62px; border-radius: 50%;
   border: 0 dashed var(--red);
 }
 .ball.done::before {
-  left: -54px; border-right-width: 3px;
+  left: -62px; border-right-width: 3px;
 }
 .ball.done::after {
-  right: -54px; border-left-width: 3px;
+  right: -62px; border-left-width: 3px;
 }
 .ball .safe {
-  position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center;
-  font-size: 15px; font-weight: 900; color: var(--red); transform: rotate(-12deg);
-  letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+  position: absolute; top: 50%; left: 50%; z-index: 1;
+  transform: translate(-50%, -50%) rotate(-10deg);
+  padding: 1px 5px; border-radius: 7px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 14px; font-weight: 900; color: var(--red); letter-spacing: 0.3px;
 }
 
 .empty { color: var(--white); text-align: center; padding: 28px 12px; font-size: 18px; }
