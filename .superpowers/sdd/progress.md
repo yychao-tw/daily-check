@@ -41,3 +41,5 @@ Task 9: complete (commits 127dc38..b474891, review clean — 1 Minor dead code)
 
 Task 10: complete (commits f5cfe8f..f8b0d32, review clean — 1 Minor)
 - Minor: showHomeRun no guard against overlapping overlays on rapid re-trigger — defer
+
+Task 11: complete (commits efffa13..8e61a51, review clean — no issues)
