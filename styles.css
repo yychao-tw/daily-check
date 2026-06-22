@@ -86,19 +86,29 @@ html, body {
 .card.done .title { color: #2e7d32; text-decoration: line-through; }
 
 .ball {
-  position: relative; flex: 0 0 auto;
-  width: 48px; height: 48px; border-radius: 50%;
+  position: relative; flex: 0 0 auto; overflow: hidden;
+  width: 52px; height: 52px; border-radius: 50%;
   background: var(--gray); border: 3px solid #9aa6b1;
 }
 .ball.done {
   background: var(--white); border-color: var(--red);
-  background-image:
-    radial-gradient(circle at 14px 14px, transparent 16px, var(--red) 17px, transparent 18px),
-    radial-gradient(circle at 34px 34px, transparent 16px, var(--red) 17px, transparent 18px);
+}
+/* Two symmetric curved dashed seams, like a real baseball. */
+.ball.done::before, .ball.done::after {
+  content: ''; position: absolute; top: -8%;
+  width: 66px; height: 62px; border-radius: 50%;
+  border: 0 dashed var(--red);
+}
+.ball.done::before {
+  left: -54px; border-right-width: 3px;
+}
+.ball.done::after {
+  right: -54px; border-left-width: 3px;
 }
 .ball .safe {
-  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 800; color: var(--red); transform: rotate(-12deg);
+  position: absolute; inset: 0; z-index: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 15px; font-weight: 900; color: var(--red); transform: rotate(-12deg);
+  letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(255,255,255,0.9);
 }
 
 .empty { color: var(--white); text-align: center; padding: 28px 12px; font-size: 18px; }
