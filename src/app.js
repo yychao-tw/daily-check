@@ -2,6 +2,7 @@
 import { loadState, saveState } from './storage.js';
 import { todayStr, getWeekday } from './model.js';
 import { parseTemplatesFromHash } from './share.js';
+import { preloadSamples } from './sound.js';
 import { renderMain } from './ui-main.js';
 import { renderEditDay } from './ui-editday.js';
 import { renderTemplate } from './ui-template.js';
@@ -45,6 +46,8 @@ function render() {
 }
 
 render();
+
+preloadSamples();
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

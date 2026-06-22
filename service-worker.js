@@ -1,4 +1,4 @@
-const CACHE = 'daily-tasks-v6';
+const CACHE = 'daily-tasks-v7';
 const ASSETS = [
   './',
   './index.html',
@@ -31,5 +31,19 @@ self.addEventListener('activate', (e) => {
 });
 
 self.addEventListener('fetch', (e) => {
-  e.respondWith(caches.match(e.request).then((r) => r || fetch(e.request)));
+  const req = e.request;
+  e.respondWith(
+    caches.match(req).then((cached) => {
+      if (cached) return cached;
+      return fetch(req).then((res) => {
+        // Runtime-cache successful same-origin GET responses (e.g. the optional
+        // sound files dropped into ./sounds/) so they work offline next time.
+        if (req.method === 'GET' && res && res.ok && res.type === 'basic') {
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
+        }
+        return res;
+      }).catch(() => cached);
+    })
+  );
 });

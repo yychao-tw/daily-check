@@ -1,9 +1,18 @@
 // src/sound.js
-// Synthesized sound effects via the Web Audio API. No audio files, works
-// offline, no copyright concerns. All functions are safe no-ops when the
-// Web Audio API is unavailable (e.g. under Node) or when muted.
+// Sound effects for the app. Prefers real audio files dropped into ./sounds/
+// (sounds/bat-hit.mp3 for a check, sounds/play-ball.mp3 for finishing the day),
+// and falls back to Web Audio synthesized sounds when those files are absent.
+// All functions are safe no-ops when audio is unavailable (e.g. under Node) or
+// when muted.
 
 const MUTE_KEY = 'baseball-daily-tasks-muted';
+
+// Real audio samples (optional). If a file is missing the synth fallback runs.
+const SAMPLE_URLS = {
+  hit: './sounds/bat-hit.mp3',
+  homerun: './sounds/play-ball.mp3',
+};
+const decodedSamples = {}; // name -> AudioBuffer once loaded
 
 let ctx = null;
 
@@ -21,6 +30,39 @@ function getCtx() {
   return ctx;
 }
 
+// Fetch and decode any sample files that exist. Missing files (404) are
+// ignored so the synth fallback is used instead. Safe to call at startup.
+export function preloadSamples() {
+  if (typeof fetch === 'undefined') return;
+  const ac = getCtx();
+  if (!ac) return;
+  for (const [name, url] of Object.entries(SAMPLE_URLS)) {
+    fetch(url)
+      .then((r) => (r.ok ? r.arrayBuffer() : null))
+      .then((buf) => {
+        if (!buf) return;
+        ac.decodeAudioData(buf, (audio) => { decodedSamples[name] = audio; }, () => {});
+      })
+      .catch(() => {});
+  }
+}
+
+function playSample(name) {
+  const ac = getCtx();
+  if (!ac) return false;
+  const buffer = decodedSamples[name];
+  if (!buffer) return false;
+  try {
+    const src = ac.createBufferSource();
+    src.buffer = buffer;
+    src.connect(ac.destination);
+    src.start();
+    return true;
+  } catch (_e) {
+    return false;
+  }
+}
+
 export function isMuted() {
   try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (_e) { return false; }
 }
@@ -35,10 +77,10 @@ export function toggleMute() {
   return next;
 }
 
-// A short, sharp "bat hitting the ball" crack: a noise transient plus a brief
-// woody thump.
+// Bat-hitting-ball sound on a check: real sample if available, else synth.
 export function playHit() {
   if (isMuted()) return;
+  if (playSample('hit')) return;
   const ac = getCtx();
   if (!ac) return;
   try {
@@ -95,9 +137,11 @@ function playHitImpl(ac) {
   noise.stop(now + nDur);
 }
 
-// A celebratory ascending fanfare for finishing every task ("home run").
+// A celebratory sound for finishing every task ("home run"): real sample if
+// available, else a synthesized ascending fanfare.
 export function playHomeRun() {
   if (isMuted()) return;
+  if (playSample('homerun')) return;
   const ac = getCtx();
   if (!ac) return;
   try {
