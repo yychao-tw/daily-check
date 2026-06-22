@@ -28,3 +28,6 @@ Task 4: complete (commits d9c083e..4260d46, review clean — 2 Minor noted)
 Task 5: complete (commits 8ae758e..09a298c, review clean — 2 Minor noted)
 - Minor: storage catch swallows error var e (rename _e) — defer
 - Minor: typeof days==='object' accepts arrays (use !Array.isArray) — defer
+
+Task 6: complete (commits 373b55c..d3a759d, review clean — 1 Minor noted)
+- Minor: styles.css missing -webkit-user-select prefix (old iOS) — defer
