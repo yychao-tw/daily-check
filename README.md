@@ -33,21 +33,10 @@ python3 -m http.server 8000    # 本機預覽 http://localhost:8000/
 
 Service Worker 會把檔案快取以支援離線。當你日後修改程式並重新部署時，請**修改 `service-worker.js` 最上方的快取名稱**（例如把 `daily-tasks-v1` 改成 `daily-tasks-v2`），這樣 iPad 才會抓到新版檔案，而不是沿用舊的快取。
 
-## 音效（可自訂）
+## 音效
 
-App 預設使用程式即時合成的音效（鋁棒打擊聲、全壘打號角），不需任何檔案、離線可用。
-
-若想換成真實音效，把音檔放進 `sounds/` 資料夾即可自動套用（沒有檔案時就用合成音效）：
-
-- 打勾音效：`sounds/bat-hit.mp3`
-- 全壘打音效：`sounds/play-ball.mp3`
-
-**上傳方式（不需改程式）**：到 GitHub 儲存庫 → 進入 `sounds/` 資料夾 → 「Add file → Upload files」→ 上傳上述兩個檔名的 mp3 → Commit。約 1-2 分鐘後在 iPad Safari 重整即可生效。
-
-> 提醒：請確認音檔授權允許使用。建議選 CC0（可自由使用）或 CC-BY（需標註作者，請補充到下方致謝）。
+App 會播放 `sounds/` 資料夾裡的音檔：打勾時播 `sounds/hit.mp3`、當天全部完成時播 `sounds/HR.mp3`。主畫面有「聲音：開／關」按鈕可切換靜音。若音檔不存在，會自動退回程式即時合成的音效。
 
 ## 致謝（音效授權）
 
-若使用下列音效，依其授權標註作者：
-
-- 「Play Ball!.wav」by CGEffex — 來源 freesound.org，授權 Creative Commons Attribution 3.0（CC-BY 3.0）。
+請依所用音效的授權標註作者來源（例如 freesound.org 的 CC-BY 音效需註明作者）。

@@ -1,4 +1,4 @@
-const CACHE = 'daily-tasks-v7';
+const CACHE = 'daily-tasks-v8';
 const ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,8 @@ const ASSETS = [
   './src/ui-main.js',
   './src/ui-editday.js',
   './src/ui-template.js',
+  './sounds/hit.mp3',
+  './sounds/HR.mp3',
   './icons/icon-180.png',
   './icons/icon-192.png',
   './icons/icon-512.png',

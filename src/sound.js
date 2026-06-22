@@ -9,8 +9,8 @@ const MUTE_KEY = 'baseball-daily-tasks-muted';
 
 // Real audio samples (optional). If a file is missing the synth fallback runs.
 const SAMPLE_URLS = {
-  hit: './sounds/bat-hit.mp3',
-  homerun: './sounds/play-ball.mp3',
+  hit: './sounds/hit.mp3',
+  homerun: './sounds/HR.mp3',
 };
 const decodedSamples = {}; // name -> AudioBuffer once loaded
 
