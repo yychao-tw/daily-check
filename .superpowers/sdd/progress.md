@@ -20,3 +20,7 @@ Task 3: complete (commits f4740e3..3b4b312, review clean — 3 Minor noted)
 - Minor: moveInArray no-op returns live ref (harmless now) — defer
 - Minor: no +1 move-down test coverage — defer
 - Minor: report inaccurately called mutations "pure" — cosmetic
+
+Task 4: complete (commits d9c083e..4260d46, review clean — 2 Minor noted)
+- Minor: hardcoded Monday date in test is load-bearing (no // Monday comment) — defer
+- Minor: addTemplateTask uses if(!...) vs sibling || [] style — cosmetic
