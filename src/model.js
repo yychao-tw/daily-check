@@ -62,3 +62,53 @@ export function countDone(tasks) {
 export function isAllDone(tasks) {
   return tasks.length > 0 && tasks.every((t) => t.done);
 }
+
+function moveInArray(arr, id, delta) {
+  const i = arr.findIndex((t) => t.id === id);
+  if (i === -1) return arr;
+  const j = i + delta;
+  if (j < 0 || j >= arr.length) return arr;
+  const copy = arr.slice();
+  const [item] = copy.splice(i, 1);
+  copy.splice(j, 0, item);
+  return copy;
+}
+
+export function materializeDay(state, dateStr) {
+  if (!isDayMaterialized(state, dateStr)) {
+    state.days[dateStr] = getDayTasks(state, dateStr);
+  }
+  return state;
+}
+
+export function toggleTask(state, dateStr, taskId) {
+  materializeDay(state, dateStr);
+  const task = state.days[dateStr].find((t) => t.id === taskId);
+  if (task) task.done = !task.done;
+  return state;
+}
+
+export function addDayTask(state, dateStr, title) {
+  materializeDay(state, dateStr);
+  state.days[dateStr].push({ id: createId(), title, done: false });
+  return state;
+}
+
+export function removeDayTask(state, dateStr, taskId) {
+  materializeDay(state, dateStr);
+  state.days[dateStr] = state.days[dateStr].filter((t) => t.id !== taskId);
+  return state;
+}
+
+export function editDayTask(state, dateStr, taskId, title) {
+  materializeDay(state, dateStr);
+  const task = state.days[dateStr].find((t) => t.id === taskId);
+  if (task) task.title = title;
+  return state;
+}
+
+export function moveDayTask(state, dateStr, taskId, delta) {
+  materializeDay(state, dateStr);
+  state.days[dateStr] = moveInArray(state.days[dateStr], taskId, delta);
+  return state;
+}
