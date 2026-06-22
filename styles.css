@@ -93,11 +93,11 @@ html, body {
 .ball.done {
   background: var(--white); border-color: var(--red);
 }
-/* Two symmetric curved dashed seams hugging the left/right edges. */
+/* Two symmetric curved solid seams hugging the left/right edges. */
 .ball.done::before, .ball.done::after {
   content: ''; position: absolute; top: -8%;
   width: 70px; height: 62px; border-radius: 50%;
-  border: 0 dashed var(--red);
+  border: 0 solid var(--red);
 }
 .ball.done::before {
   left: -62px; border-right-width: 3px;
@@ -159,7 +159,7 @@ html, body {
 .homerun-ball::before, .homerun-ball::after {
   content: ''; position: absolute; top: -6%;
   width: 104px; height: 92px; border-radius: 50%;
-  border: 0 dashed var(--red);
+  border: 0 solid var(--red);
 }
 .homerun-ball::before { left: -92px; border-right-width: 4px; }
 .homerun-ball::after { right: -92px; border-left-width: 4px; }
