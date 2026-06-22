@@ -1,6 +1,6 @@
 import { el } from './dom.js';
 import {
-  getDayTasks, toggleTask, countDone,
+  getDayTasks, toggleTask, countDone, isAllDone,
   weekdayName, getWeekday, addDays, todayStr,
 } from './model.js';
 
@@ -33,9 +33,12 @@ export function renderMain(root, ctx) {
   } else {
     for (const t of tasks) {
       list.appendChild(taskCard(t, () => {
+        const wasAllDone = isAllDone(getDayTasks(ctx.state, dateStr));
         toggleTask(ctx.state, dateStr, t.id);
         ctx.save();
+        const nowAllDone = isAllDone(getDayTasks(ctx.state, dateStr));
         ctx.render();
+        if (!wasAllDone && nowAllDone) showHomeRun();
       }));
     }
   }
@@ -70,4 +73,13 @@ function buildDiamond(done, total) {
 function formatHuman(dateStr) {
   const [y, m, d] = dateStr.split('-');
   return `${y} 年 ${Number(m)} 月 ${Number(d)} 日`;
+}
+
+function showHomeRun() {
+  const overlay = el('div', { class: 'homerun-overlay' }, [
+    el('div', { class: 'homerun-ball' }),
+    el('div', { class: 'homerun-text', text: '全壘打！今天全部完成！' }),
+  ]);
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.remove(), 2600);
 }
