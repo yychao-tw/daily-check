@@ -38,3 +38,27 @@ export function emptyState() {
     days: {},
   };
 }
+
+export function getTemplate(state, weekday) {
+  return (state.templates[weekday] || []).map((t) => ({ id: t.id, title: t.title }));
+}
+
+export function isDayMaterialized(state, dateStr) {
+  return Object.prototype.hasOwnProperty.call(state.days, dateStr);
+}
+
+export function getDayTasks(state, dateStr) {
+  if (isDayMaterialized(state, dateStr)) {
+    return state.days[dateStr].map((t) => ({ id: t.id, title: t.title, done: t.done }));
+  }
+  const weekday = getWeekday(dateStr);
+  return getTemplate(state, weekday).map((t) => ({ id: t.id, title: t.title, done: false }));
+}
+
+export function countDone(tasks) {
+  return { done: tasks.filter((t) => t.done).length, total: tasks.length };
+}
+
+export function isAllDone(tasks) {
+  return tasks.length > 0 && tasks.every((t) => t.done);
+}
