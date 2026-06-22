@@ -35,10 +35,23 @@ html, body {
 .date { font-size: 22px; font-weight: 700; }
 .weekday { font-size: 18px; opacity: 0.9; }
 .todaybtn {
-  display: block; margin: 12px auto 4px; padding: 8px 20px;
+  display: block; margin: 0; padding: 8px 20px;
   font-size: 16px; color: var(--navy); background: var(--white);
   border: none; border-radius: 999px; cursor: pointer;
 }
+.controlrow { display: flex; gap: 10px; justify-content: center; align-items: center; margin: 12px 0 4px; }
+.soundbtn {
+  padding: 8px 18px; font-size: 16px; color: var(--white); background: var(--navy);
+  border: none; border-radius: 999px; cursor: pointer;
+}
+.soundbtn.muted { background: #6b7785; }
+.soundbtn:active, .todaybtn:active { transform: scale(0.96); }
+.sharebtn {
+  display: block; width: 100%; margin-top: 18px; padding: 14px 8px;
+  font-size: 18px; font-weight: 700; color: var(--white); background: var(--grass-dark);
+  border: none; border-radius: 12px; cursor: pointer;
+}
+.sharebtn:active { transform: scale(0.98); }
 
 /* scoreboard */
 .scoreboard {
@@ -50,14 +63,15 @@ html, body {
 .score-label { font-size: 18px; opacity: 0.85; }
 .score-num { font-weight: 800; }
 
-/* diamond / bases */
-.diamond { position: relative; width: 160px; height: 160px; margin: 8px auto 20px; transform: rotate(45deg); }
-.base { position: absolute; width: 34px; height: 34px; background: var(--gray); border: 3px solid var(--white); }
+/* diamond / bases — container is NOT rotated so its layout box matches its
+   visual box; only each base is rotated 45deg into a diamond shape. */
+.diamond { position: relative; width: 180px; height: 150px; margin: 14px auto 22px; }
+.base { position: absolute; width: 28px; height: 28px; background: var(--gray); border: 2px solid var(--white); }
 .base.lit { background: var(--white); box-shadow: 0 0 12px #fff8c2; }
-.base1 { bottom: 0; right: 0; }   /* 一壘 */
-.base2 { top: 0; right: 0; }      /* 二壘 */
-.base3 { top: 0; left: 0; }       /* 三壘 */
-.base4 { bottom: 0; left: 0; border-radius: 4px; } /* 本壘 */
+.base1 { top: 50%; right: 10px; transform: translateY(-50%) rotate(45deg); }   /* 一壘 右 */
+.base2 { top: 10px; left: 50%; transform: translateX(-50%) rotate(45deg); }    /* 二壘 上 */
+.base3 { top: 50%; left: 10px; transform: translateY(-50%) rotate(45deg); }    /* 三壘 左 */
+.base4 { bottom: 10px; left: 50%; transform: translateX(-50%) rotate(45deg); border-radius: 4px; } /* 本壘 下 */
 
 /* task cards */
 .tasklist { display: flex; flex-direction: column; gap: 14px; }

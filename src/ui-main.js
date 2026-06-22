@@ -3,6 +3,7 @@ import {
   getDayTasks, toggleTask, countDone, isAllDone,
   weekdayName, getWeekday, addDays, todayStr,
 } from './model.js';
+import { playHit, playHomeRun, isMuted, toggleMute } from './sound.js';
 
 export function renderMain(root, ctx) {
   const dateStr = ctx.currentDate;
@@ -19,6 +20,12 @@ export function renderMain(root, ctx) {
   ]);
 
   const todayBtn = el('button', { class: 'todaybtn', text: '回到今天', onClick: () => { ctx.setDate(todayStr()); ctx.render(); } });
+  const soundBtn = el('button', {
+    class: 'soundbtn' + (isMuted() ? ' muted' : ''),
+    text: isMuted() ? '聲音：關' : '聲音：開',
+    onClick: () => { toggleMute(); ctx.render(); },
+  });
+  const controlRow = el('div', { class: 'controlrow' }, [todayBtn, soundBtn]);
 
   const scoreboard = el('div', { class: 'scoreboard' }, [
     el('span', { class: 'score-label', text: '完成' }),
@@ -33,12 +40,18 @@ export function renderMain(root, ctx) {
   } else {
     for (const t of tasks) {
       list.appendChild(taskCard(t, () => {
+        const willBeDone = !t.done;
         const wasAllDone = isAllDone(getDayTasks(ctx.state, dateStr));
         toggleTask(ctx.state, dateStr, t.id);
         ctx.save();
         const nowAllDone = isAllDone(getDayTasks(ctx.state, dateStr));
         ctx.render();
-        if (!wasAllDone && nowAllDone) showHomeRun();
+        if (!wasAllDone && nowAllDone) {
+          showHomeRun();
+          playHomeRun();
+        } else if (willBeDone) {
+          playHit();
+        }
       }));
     }
   }
@@ -48,12 +61,12 @@ export function renderMain(root, ctx) {
     el('button', { class: 'bigbtn tmpl', text: '每週範本', onClick: () => { ctx.setWeekday(getWeekday(ctx.currentDate)); ctx.go('template'); } }),
   ]);
 
-  root.appendChild(el('div', { class: 'screen main' }, [header, todayBtn, scoreboard, diamond, list, footer]));
+  root.appendChild(el('div', { class: 'screen main' }, [header, controlRow, scoreboard, diamond, list, footer]));
 }
 
 function taskCard(task, onToggle) {
   const ball = el('div', { class: 'ball' + (task.done ? ' done' : '') });
-  if (task.done) ball.appendChild(el('span', { class: 'safe', text: 'SAFE' }));
+  if (task.done) ball.appendChild(el('span', { class: 'safe', text: 'Hit' }));
   return el('div', { class: 'card' + (task.done ? ' done' : ''), onClick: onToggle }, [
     ball,
     el('div', { class: 'title', text: task.title }),

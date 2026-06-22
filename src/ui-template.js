@@ -3,6 +3,7 @@ import {
   getTemplate, addTemplateTask, removeTemplateTask, editTemplateTask, moveTemplateTask,
   weekdayName,
 } from './model.js';
+import { buildShareUrl } from './share.js';
 
 export function renderTemplate(root, ctx) {
   const w = ctx.selectedWeekday;
@@ -50,5 +51,29 @@ export function renderTemplate(root, ctx) {
 
   const note = el('div', { class: 'note', text: '修改範本只影響「之後尚未被單獨編輯過」的日子。' });
 
-  root.appendChild(el('div', { class: 'screen template' }, [header, tabs, list, addRow, note]));
+  const shareBtn = el('button', {
+    class: 'sharebtn', text: '匯出範本連結（傳到 iPad）',
+    onClick: () => exportTemplatesLink(ctx),
+  });
+  const shareNote = el('div', { class: 'note', text: '在電腦填好範本後，按上面按鈕複製連結，用 LINE 或 Email 傳到 iPad，點開連結即可匯入（只會覆蓋每週範本，打勾紀錄保留）。' });
+
+  root.appendChild(el('div', { class: 'screen template' }, [header, tabs, list, addRow, note, shareBtn, shareNote]));
+}
+
+async function exportTemplatesLink(ctx) {
+  const url = buildShareUrl(ctx.state.templates, location.href);
+  let copied = false;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(url);
+      copied = true;
+    }
+  } catch (_e) {
+    copied = false;
+  }
+  if (copied) {
+    window.alert('已複製範本連結！用 LINE 或 Email 傳到 iPad，點開連結即可匯入。');
+  } else {
+    window.prompt('複製這段範本連結，傳到 iPad 後用 Safari 開啟：', url);
+  }
 }
