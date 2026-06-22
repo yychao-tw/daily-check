@@ -33,3 +33,6 @@ Task 6: complete (commits 373b55c..d3a759d, review clean — 1 Minor noted)
 - Minor: styles.css missing -webkit-user-select prefix (old iOS) — defer
 
 Task 7: complete (commits 11de651..86d71d7, review clean — 2 Minor cosmetic)
+
+Task 8: complete (commits 1606d63..328089e, review clean — 1 Minor)
+- Minor: empty rename leaves input field visually blank (no reset to original) — UX polish, triage at final review
