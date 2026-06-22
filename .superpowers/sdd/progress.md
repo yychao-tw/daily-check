@@ -15,3 +15,8 @@ Task 1: complete (commits a64f483..005ebc5, review clean — 2 Minor noted)
 
 Task 2: complete (commits 8a7daae..004eea2, review clean — 1 Minor noted)
 - Minor: getDayTasks non-materialized path double-maps (plan-mandated code) — defer
+
+Task 3: complete (commits f4740e3..3b4b312, review clean — 3 Minor noted)
+- Minor: moveInArray no-op returns live ref (harmless now) — defer
+- Minor: no +1 move-down test coverage — defer
+- Minor: report inaccurately called mutations "pure" — cosmetic
