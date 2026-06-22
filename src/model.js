@@ -112,3 +112,25 @@ export function moveDayTask(state, dateStr, taskId, delta) {
   state.days[dateStr] = moveInArray(state.days[dateStr], taskId, delta);
   return state;
 }
+
+export function addTemplateTask(state, weekday, title) {
+  if (!state.templates[weekday]) state.templates[weekday] = [];
+  state.templates[weekday].push({ id: createId(), title });
+  return state;
+}
+
+export function removeTemplateTask(state, weekday, taskId) {
+  state.templates[weekday] = (state.templates[weekday] || []).filter((t) => t.id !== taskId);
+  return state;
+}
+
+export function editTemplateTask(state, weekday, taskId, title) {
+  const task = (state.templates[weekday] || []).find((t) => t.id === taskId);
+  if (task) task.title = title;
+  return state;
+}
+
+export function moveTemplateTask(state, weekday, taskId, delta) {
+  state.templates[weekday] = moveInArray(state.templates[weekday] || [], taskId, delta);
+  return state;
+}
