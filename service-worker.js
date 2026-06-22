@@ -1,4 +1,4 @@
-const CACHE = 'daily-tasks-v8';
+const CACHE = 'daily-tasks-v9';
 const ASSETS = [
   './',
   './index.html',

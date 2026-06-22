@@ -21,6 +21,12 @@ function chunk(type, data) {
 
 function png(size) {
   const cx = size / 2, cy = size / 2, r = size * 0.42;
+  // Two curved seams: arcs of large circles centred just outside the ball on
+  // the left and right, so each circle's near edge sweeps a curve across the
+  // ball face — the classic baseball stitch curvature.
+  const seamCx = r * 1.6;     // horizontal offset of each seam circle's centre
+  const seamR = r * 1.18;     // seam circle radius (near edge sits ~0.42r from centre)
+  const seamHalf = size * 0.022; // half thickness of the seam line
   const rows = [];
   for (let y = 0; y < size; y++) {
     const row = Buffer.alloc(1 + size * 4);
@@ -32,8 +38,24 @@ function png(size) {
       if (dist <= r) {
         // white baseball
         row[o] = 255; row[o + 1] = 255; row[o + 2] = 255; row[o + 3] = 255;
-        // red seams near left/right edges
-        if (dist > r * 0.74 && Math.abs(dx) > r * 0.5) {
+        // curved red seams (left arc + right arc), limited to the mid band
+        const dl = Math.sqrt((dx + seamCx) * (dx + seamCx) + dy * dy);
+        const dr = Math.sqrt((dx - seamCx) * (dx - seamCx) + dy * dy);
+        const inBand = Math.abs(dy) < r * 0.92;
+        // base seam line
+        let seam = inBand && (Math.abs(dl - seamR) < seamHalf || Math.abs(dr - seamR) < seamHalf);
+        // stitch ticks: short marks straddling each seam at regular angles
+        if (inBand) {
+          const tick = size * 0.05;       // half-length of a stitch tick
+          const tickThick = size * 0.016;  // half-thickness of a stitch tick
+          const period = size * 0.052;     // spacing between stitches along y
+          const phase = ((y % period) + period) % period;
+          if (phase < tickThick * 2) {
+            if (Math.abs(dl - seamR) < tick) seam = true;
+            if (Math.abs(dr - seamR) < tick) seam = true;
+          }
+        }
+        if (seam) {
           row[o] = 200; row[o + 1] = 30; row[o + 2] = 30;
         }
       } else {
