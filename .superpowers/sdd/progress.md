@@ -24,3 +24,7 @@ Task 3: complete (commits f4740e3..3b4b312, review clean — 3 Minor noted)
 Task 4: complete (commits d9c083e..4260d46, review clean — 2 Minor noted)
 - Minor: hardcoded Monday date in test is load-bearing (no // Monday comment) — defer
 - Minor: addTemplateTask uses if(!...) vs sibling || [] style — cosmetic
+
+Task 5: complete (commits 8ae758e..09a298c, review clean — 2 Minor noted)
+- Minor: storage catch swallows error var e (rename _e) — defer
+- Minor: typeof days==='object' accepts arrays (use !Array.isArray) — defer
