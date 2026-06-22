@@ -31,3 +31,5 @@ Task 5: complete (commits 8ae758e..09a298c, review clean — 2 Minor noted)
 
 Task 6: complete (commits 373b55c..d3a759d, review clean — 1 Minor noted)
 - Minor: styles.css missing -webkit-user-select prefix (old iOS) — defer
+
+Task 7: complete (commits 11de651..86d71d7, review clean — 2 Minor cosmetic)
