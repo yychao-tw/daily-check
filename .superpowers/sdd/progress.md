@@ -43,3 +43,10 @@ Task 10: complete (commits f5cfe8f..f8b0d32, review clean — 1 Minor)
 - Minor: showHomeRun no guard against overlapping overlays on rapid re-trigger — defer
 
 Task 11: complete (commits efffa13..8e61a51, review clean — no issues)
+
+FINAL WHOLE-BRANCH REVIEW (8e7d521..135573f, opus): READY — 0 must-fix.
+All 9 known Minors triaged safe-to-defer. Post-merge notes:
+- SW cache name daily-tasks-v1 is static; bump it on future redeploys to avoid stale assets.
+- caches.match has no ignoreSearch (latent only; no query requests today).
+
+Task 12 (README + GitHub Pages deploy): PENDING — needs user GitHub account + consent (public repo) + gh auth login.
